@@ -1,6 +1,6 @@
 (ns status-im.utils.money
   (:require [clojure.string :as string]
-            [status-im.js-dependencies :as dependencies]))
+            ["bignumber.js" :as BigNumber]))
 
 ;; The BigNumber version included in web3 sometimes hangs when dividing large
 ;; numbers Hence we want to use these functions instead of fromWei etc, which
@@ -30,7 +30,7 @@
 (defn bignumber [n]
   (when n
     (try
-      (new dependencies/BigNumber (normalize (str n)))
+      (new BigNumber (normalize (str n)))
       (catch :default err nil))))
 
 (defn valid? [bn]

@@ -2,8 +2,8 @@
   (:require [status-im.ui.components.react :as react]
             [status-im.ui.components.animation :as animation]
             [status-im.ui.components.bottom-sheet.styles :as styles]
-            [status-im.react-native.js-dependencies :as js-dependencies]
             [status-im.utils.platform :as platform]
+            ["react-native" :refer (BackHandler)]
             [reagent.core :as reagent]
             [re-frame.core :as re-frame]))
 
@@ -154,7 +154,7 @@
                           :internal-atom internal-visible
                           :height        height})
                 (when platform/android?
-                  (reset! back-listener (.addEventListener js-dependencies/back-handler
+                  (reset! back-listener (.addEventListener BackHandler
                                                            "hardwareBackPress"
                                                            handle-back))))
 

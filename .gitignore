@@ -86,6 +86,9 @@ figwheel_server.log
 .lein-failures
 .lein-repl-history
 
+# Shadow
+.shadow-cljs
+
 ## Doo
 #
 out

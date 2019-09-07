@@ -1,6 +1,6 @@
 (ns status-im.chat.models.message-list
   (:require
-   [status-im.js-dependencies :as dependencies]
+   ["functional-red-black-tree" :as rb-tree]
    [taoensso.timbre :as log]
    [status-im.constants :as constants]
    [status-im.utils.fx :as fx]
@@ -175,7 +175,7 @@
     (update-message tree prepared-message)))
 
 (defn add [message-list message]
-  (insert-message (or message-list (dependencies/rb-tree compare-fn))
+  (insert-message (or message-list (rb-tree compare-fn))
                   (prepare-message message)))
 
 (defn add-many [message-list messages]

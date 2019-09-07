@@ -4,10 +4,12 @@
    [status-im.hardwallet.real-keycard :as real-keycard]
    [status-im.hardwallet.simulated-keycard :as simulated-keycard]
    [status-im.hardwallet.ios-keycard :as ios-keycard]
-   [status-im.utils.platform :as platform]
    [taoensso.timbre :as log]
    [re-frame.core :as re-frame]
-   [status-im.utils.config :as config]))
+   [status-im.utils.config :as config]
+   [status-im.utils.platform :as platform]
+   ["react-native" :as react-native]
+   ["react-native-status-keycard" :default keycard]))
 
 (defonce card (if config/keycard-test-menu-enabled?
                 (simulated-keycard/SimulatedKeycard.)

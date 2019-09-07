@@ -236,7 +236,7 @@ jsbundle-desktop: ##@jsbundle Compile JavaScript and Clojure into index.desktop.
 _watch-%: ##@watch Start development for device
 	$(eval SYSTEM := $(word 2, $(subst -, , $@)))
 	$(eval DEVICE := $(word 3, $(subst -, , $@)))
-	clj -R:dev build.clj watch --platform $(SYSTEM) --$(SYSTEM)-device $(DEVICE)
+	yarn shadow-cljs watch $(SYSTEM)
 
 watch-ios-real: export TARGET := ios
 watch-ios-real: _watch-ios-real ##@watch Start development for iOS real device
