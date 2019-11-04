@@ -144,7 +144,7 @@
                                                          :optimize-constants true
                                                          :optimizations      :advanced
                                                          :stable-names       true
-                                                         :pseudo-names       false
+                                                         :pseudo-names       true
                                                          :pretty-print       false
                                                          :closure-defines    {"goog.DEBUG" false}
                                                          :parallel-build     false
