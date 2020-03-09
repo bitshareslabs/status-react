@@ -9,6 +9,7 @@
             [status-im.ui.components.chat-icon.screen :as chat-icon]
             [status-im.ui.components.list-item.views :as list-item]
             [status-im.wallet.utils :as wallet.utils]
+            [status-im.ui.starter-pack.view :as starter-pack]
             [reagent.core :as reagent]
             [re-frame.core :as re-frame]
             [status-im.ui.screens.wallet.accounts.sheets :as sheets]
@@ -180,6 +181,7 @@
     [react/view {:margin-top 8}
      [total-value]
      [accounts]]
+    [starter-pack/starter-pack]
     [assets]
     [react/view {:height 68}]]
    [send-button]])
