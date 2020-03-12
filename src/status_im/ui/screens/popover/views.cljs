@@ -9,6 +9,7 @@
             [status-im.ui.screens.wallet.request.views :as request]
             [status-im.ui.screens.profile.user.views :as profile.user]
             [status-im.ui.screens.multiaccounts.recover.views :as multiaccounts.recover]
+            [status-im.ui.starter-pack.popover :as starter-pack]
             [status-im.react-native.js-dependencies :as js-dependencies]
             [status-im.ui.screens.biometric.views :as biometric]
             [status-im.ui.components.colors :as colors]))
@@ -132,6 +133,9 @@
 
                    (= :disable-password-saving view)
                    [biometric/disable-password-saving-popover]
+
+                   (= :starter-pack-success view)
+                   [starter-pack/success-popover]
 
                    :else
                    [view])]]]]])))})))

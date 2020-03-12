@@ -2157,6 +2157,11 @@ dom-walk@^0.1.0:
   resolved "https://registry.yarnpkg.com/dom-walk/-/dom-walk-0.1.1.tgz#672226dc74c8f799ad35307df936aba11acd6018"
   integrity sha1-ZyIm3HTI95mtNTB9+TaroRrNYBg=
 
+dooboolab-welcome@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/dooboolab-welcome/-/dooboolab-welcome-1.1.1.tgz#ca2184f6e1f568865d707a6ce3bda7e003550f54"
+  integrity sha512-tQ/9NBCGnalHwKOBjDqTD4t4wQpDfSSbxQGctzkzaLHR3AhN0wCBkIs05JciVtvl/jfLZ+DgAndktAMk3Bu7Vw==
+
 ecc-jsbn@~0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"
@@ -4921,6 +4926,13 @@ react-native-gesture-handler@^1.5.3:
     hoist-non-react-statics "^2.3.1"
     invariant "^2.2.4"
     prop-types "^15.7.2"
+
+react-native-iap@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-4.4.2.tgz#3460fcc3166a1218b8bfe6022c0a053acd767246"
+  integrity sha512-uia29mVN0eoZjXQ6xPz1QEOwXJaqxk9uzEhEz7PUzI6GctRvmptg95Hilqo05yLXIEvWciMQYn32VIMXZ+Zf8A==
+  dependencies:
+    dooboolab-welcome "^1.1.1"
 
 react-native-image-crop-picker@^0.25.0:
   version "0.25.3"

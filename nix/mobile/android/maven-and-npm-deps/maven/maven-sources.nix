@@ -275,6 +275,21 @@ in {
       sha256 = "0wzb576xav3xwlicdi5a4lfmgxxb0bpb9xrbji6kg4wl92awc275";
     };
   };
+  "https://dl.google.com/dl/android/maven2/androidx/browser/browser/1.0.0/browser-1.0.0" =
+  {
+    host = repositories.google;
+    path =
+      "androidx/browser/browser/1.0.0/browser-1.0.0";
+    type = "aar";
+    pom = {
+      sha1 = "eab7204891267c1d9b9e6e00bead3cb66b8e4aad";
+      sha256 = "13867dxi61m2c8swc3qm609cfda0nvczbhk32f2lzs5gag2img8p";
+    };
+    jar = {
+      sha1 = "c7b63c6b23d0f3080adda99145248901b5921e4f";
+      sha256 = "1lc475jf0x64zzsqda9pg15n681lngkmyd3g1m0zx37cn71wa7qv";
+    };
+  };
   "https://dl.google.com/dl/android/maven2/androidx/coordinatorlayout/coordinatorlayout/1.1.0/coordinatorlayout-1.1.0" =
   {
     host = repositories.google;
@@ -1128,6 +1143,21 @@ in {
     jar = {
       sha1 = "132586ec59604a86703796851a063a0ac61f697b";
       sha256 = "0lhp66q8rxf8cxylr8g6qjqy6s26prgrnmq133cnwx2r0ciyba53";
+    };
+  };
+  "https://dl.google.com/dl/android/maven2/com/android/support/support-annotations/28.0.0/support-annotations-28.0.0" =
+  {
+    host = repositories.google;
+    path =
+      "com/android/support/support-annotations/28.0.0/support-annotations-28.0.0";
+    type = "jar";
+    pom = {
+      sha1 = "f3de3ef854e72e9b4491b0f8b9097455704f3054";
+      sha256 = "06h9y2fy4bi16rc242wg4l0s4w4abf3mji2z9lxgv4j404g4i1m0";
+    };
+    jar = {
+      sha1 = "ed73f5337a002d1fd24339d5fb08c2c9d9ca60d8";
+      sha256 = "09xrjf54i4fglvzn6kccrj77r9hdmvfxbf16fppa0grdy0a98nsx";
     };
   };
   "https://dl.google.com/dl/android/maven2/com/android/tools/analytics-library/crash/26.2.1/crash-26.2.1" =
@@ -3051,6 +3081,21 @@ in {
     jar = {
       sha1 = "8f7a3101248ff835d06374a890d6037ee12c8c52";
       sha256 = "1124xndki0ww0qpsa9xxpr3nd149m27d4w3i4aalxg40jfzaa6ib";
+    };
+  };
+  "https://jcenter.bintray.com/com/android/billingclient/billing/2.0.3/billing-2.0.3" =
+  {
+    host = repositories.jcenter;
+    path =
+      "com/android/billingclient/billing/2.0.3/billing-2.0.3";
+    type = "aar";
+    pom = {
+      sha1 = "c826861dd4f142d4142b73228b5c2645707aaa47";
+      sha256 = "1i3f3bb4jp7l3ci1hbxz1kh667anx6k686vgs6pzwbxkjdi50cng";
+    };
+    jar = {
+      sha1 = "10b6be5cfec564a73c8d25f48d6e85d72deef475";
+      sha256 = "1cz3pa118jha661vadyjki276jnm18sfy4j3wdf4dd0m0d9yhayh";
     };
   };
   "https://jcenter.bintray.com/com/android/databinding/baseLibrary/1.0-rc5/baseLibrary-1.0-rc5" =

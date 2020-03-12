@@ -45,3 +45,4 @@
 (def react-navigation-bottom-tabs (js/require "@react-navigation/bottom-tabs"))
 
 (def react-native-gesture-handler (js/require "react-native-gesture-handler"))
+(def react-native-iap (js/require "react-native-iap"))

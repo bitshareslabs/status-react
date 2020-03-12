@@ -20,6 +20,7 @@
                  [status-im/timbre "4.10.0-2-status"]
                  [com.taoensso/encore "2.94.0"]
                  [hickory "0.7.1"]
+                 [binaryage/oops "0.7.0"]
                  [cljs-bean "1.3.0"]
                  [binaryage/oops "0.7.0"]
                  [mvxcvi/alphabase "1.0.0"]]

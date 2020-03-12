@@ -71,3 +71,10 @@
 (def react-navigation-bottom-tabs #js {:createBottomTabNavigator identity})
 
 (def react-native-gesture-handler #js {})
+
+(def react-native-iap #js {:default                #js {:initConnection  identity
+                                                        :requestPurchase identity
+                                                        :getProducts     identity}
+                           :purchaseUpdatedListener identity
+                           :purchaseErrorListener  identity
+                           :finishTransaction      identity})
