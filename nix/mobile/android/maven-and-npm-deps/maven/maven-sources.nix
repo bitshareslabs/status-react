@@ -215,6 +215,21 @@ in {
       sha256 = "12vcz7x5c693gicyr8g1mbm1nq80fvz34n170sxr9pddaw6bdspp";
     };
   };
+  "https://dl.google.com/dl/android/maven2/androidx/browser/browser/1.0.0/browser-1.0.0" =
+  {
+    host = repositories.google;
+    path =
+      "androidx/browser/browser/1.0.0/browser-1.0.0";
+    type = "aar";
+    pom = {
+      sha1 = "eab7204891267c1d9b9e6e00bead3cb66b8e4aad";
+      sha256 = "13867dxi61m2c8swc3qm609cfda0nvczbhk32f2lzs5gag2img8p";
+    };
+    jar = {
+      sha1 = "c7b63c6b23d0f3080adda99145248901b5921e4f";
+      sha256 = "1lc475jf0x64zzsqda9pg15n681lngkmyd3g1m0zx37cn71wa7qv";
+    };
+  };
   "https://dl.google.com/dl/android/maven2/androidx/cardview/cardview/1.0.0/cardview-1.0.0" =
   {
     host = repositories.google;
@@ -273,21 +288,6 @@ in {
     jar = {
       sha1 = "7664385a7e39112b780baf8819ee880dcd3c4094";
       sha256 = "0wzb576xav3xwlicdi5a4lfmgxxb0bpb9xrbji6kg4wl92awc275";
-    };
-  };
-  "https://dl.google.com/dl/android/maven2/androidx/browser/browser/1.0.0/browser-1.0.0" =
-  {
-    host = repositories.google;
-    path =
-      "androidx/browser/browser/1.0.0/browser-1.0.0";
-    type = "aar";
-    pom = {
-      sha1 = "eab7204891267c1d9b9e6e00bead3cb66b8e4aad";
-      sha256 = "13867dxi61m2c8swc3qm609cfda0nvczbhk32f2lzs5gag2img8p";
-    };
-    jar = {
-      sha1 = "c7b63c6b23d0f3080adda99145248901b5921e4f";
-      sha256 = "1lc475jf0x64zzsqda9pg15n681lngkmyd3g1m0zx37cn71wa7qv";
     };
   };
   "https://dl.google.com/dl/android/maven2/androidx/coordinatorlayout/coordinatorlayout/1.1.0/coordinatorlayout-1.1.0" =

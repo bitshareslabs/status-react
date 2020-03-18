@@ -11,8 +11,8 @@ https://dl.google.com/dl/android/maven2/androidx/arch/core/core-common/2.1.0/cor
 https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.0.0/core-runtime-2.0.0
 https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.1.0/core-runtime-2.1.0
 https://dl.google.com/dl/android/maven2/androidx/asynclayoutinflater/asynclayoutinflater/1.0.0/asynclayoutinflater-1.0.0
-https://dl.google.com/dl/android/maven2/androidx/cardview/cardview/1.0.0/cardview-1.0.0
 https://dl.google.com/dl/android/maven2/androidx/browser/browser/1.0.0/browser-1.0.0
+https://dl.google.com/dl/android/maven2/androidx/cardview/cardview/1.0.0/cardview-1.0.0
 https://dl.google.com/dl/android/maven2/androidx/collection/collection/1.0.0/collection-1.0.0
 https://dl.google.com/dl/android/maven2/androidx/collection/collection/1.1.0/collection-1.1.0
 https://dl.google.com/dl/android/maven2/androidx/coordinatorlayout/coordinatorlayout/1.0.0/coordinatorlayout-1.0.0
