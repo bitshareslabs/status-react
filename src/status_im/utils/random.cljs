@@ -6,17 +6,17 @@
 (def chance (Chance.))
 
 (defn guid []
-  (.guid chance))
+  (.guid ^js chance))
 
 (defn id []
-  (str (datetime/timestamp) "-" (.guid chance)))
+  (str (datetime/timestamp) "-" (.guid ^js chance)))
 
 (defn rand-gen
   [seed]
   (Chance. seed))
 
 (defn seeded-rand-int
-  [gen n] (.integer gen #js {:min 0 :max (dec n)}))
+  [^js gen n] (.integer gen #js {:min 0 :max (dec n)}))
 
 (defn seeded-rand-nth
   [gen coll]

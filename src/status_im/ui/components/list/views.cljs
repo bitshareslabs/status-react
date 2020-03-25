@@ -172,7 +172,7 @@
       [vector-icons/icon :main-icons/next {:color colors/gray-transparent-40}])]])
 
 (defn- wrap-render-fn [f]
-  (fn [data]
+  (fn [^js data]
     (reagent/as-element (f (.-item data) (.-index data) (.-separators data)))))
 
 (defn- wrap-key-fn [f]
@@ -225,8 +225,8 @@
     :else          [item]))
 
 (defn- wrap-render-section-header-fn [f]
-  (fn [data]
-    (let [section (.-section data)]
+  (fn [^js data]
+    (let [^js section (.-section data)]
       (reagent/as-element (f {:title (.-title section)
                               :data  (.-data section)})))))
 

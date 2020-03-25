@@ -1,5 +1,5 @@
 ;; shadow-cljs configuration
-{:source-paths ["src" "dev"]
+{:source-paths ["src" "test/cljs"]
 
  :dependencies [[org.clojure/core.async "0.4.474"]
                 [reagent "0.9.1"]
@@ -15,12 +15,16 @@
                 [mvxcvi/alphabase "1.0.0"]
                 [rasom/cljs-react-navigation "0.1.4"]
                 ;; dev dependencies
-                [cider/cider-nrepl "0.21.1"]
+                [refactor-nrepl "2.5.0"]
+                [cider/cider-nrepl "0.24.0"]
+                [cider/piggieback "0.4.1"]
                 ;; test dependencies
                 [day8.re-frame/test "0.1.5"]
-                [doo "0.1.9"]]
+                [com.taoensso/tufte "2.1.0"]]
 
- :nrepl {:port 7888}
+ :nrepl {:port 7888
+         :middleware [cider.piggieback/wrap-cljs-repl
+                      refactor-nrepl.middleware/wrap-refactor]}
 
  :http {:port 3449
         :host "0.0.0.0"}
@@ -28,5 +32,28 @@
  :builds {:android
           {:target :react-native
            :init-fn status-im.android.core/init
-           :output-dir "target/android"
-           :devtools {:autoload true}}}}
+           :output-dir "app"
+           :dev {:devtools {:autoload true}
+                 :local-ip #shadow/env "SHADOW_HOST"}
+           :release {:compiler-options {:output-feature-set :es6
+                                        :warnings-as-errors true
+                                        :infer-externs :auto
+                                        :optimizations :advanced
+                                        :js-options {:js-provider :closure}}}}
+          :ios
+          {:target :react-native
+           :init-fn status-im.ios.core/init
+           :output-dir "app"
+           :dev {:devtools {:autoload true}
+                 :local-ip #shadow/env "SHADOW_HOST"}
+           :release {:compiler-options {:output-feature-set :es6
+                                        :warnings-as-errors true
+                                        :infer-externs :auto
+                                        :optimizations :advanced
+                                        :js-options {:js-provider :closure}}}}
+          :test
+          {:ns-regexp     "status-im.test."
+           :output-to     "target/test/test.js"
+           :output-dir    "target/test"
+           :optimizations :simple
+           :target        :node-test}}}

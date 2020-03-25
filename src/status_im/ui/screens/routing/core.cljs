@@ -2,11 +2,13 @@
   (:require
    [reagent.core :as reagent]
    [status-im.ui.components.react :as react]
+   [status-im.ui.components.colors :as colors]
    [re-frame.core :as re-frame]
    [taoensso.timbre :as log]
    [status-im.utils.platform :as platform]
+   ["react" :refer (useCallback useEffect)]
    ["react-native" :refer (BackHandler)]
-   ["@react-navigation/native" :refer (NavigationContainer StackActions CommonActions useFocusEffect useCallback useEffect) :as react-navigation]
+   ["@react-navigation/native" :refer (NavigationContainer StackActions CommonActions useFocusEffect) :as react-navigation]
    ["@react-navigation/stack" :refer (createStackNavigator TransitionPresets)]
    ["@react-navigation/bottom-tabs" :refer (createBottomTabNavigator)]
    [oops.core :refer [ocall oget]]
@@ -23,8 +25,13 @@
 (def use-callback useCallback)
 (def use-effect useEffect)
 
-(def add-back-handler-listener (.addEventListener BackHandler))
-(def remove-back-handler-listener (.removeEventListener BackHandler))
+(defn add-back-handler-listener
+  [callback]
+  (.addEventListener BackHandler "hardwareBackPress" callback))
+
+(defn remove-back-handler-listener
+  [callback]
+  (.removeEventListener BackHandler "hardwareBackPress" callback))
 
 (def transition-presets TransitionPresets)
 
@@ -45,9 +52,9 @@
                               (re-frame/dispatch back-handler))
                             (boolean back-handler))]
         (when on-focus (re-frame/dispatch on-focus))
-        (add-back-handler-listener "hardwareBackPress" on-back-press)
+        (add-back-handler-listener on-back-press)
         (fn []
-          (remove-back-handler-listener "hardwareBackPress" on-back-press))))
+          (remove-back-handler-listener on-back-press))))
     #js [])))
 
 (defn handle-on-screen-blur [navigation]

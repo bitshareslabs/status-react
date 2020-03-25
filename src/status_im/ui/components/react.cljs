@@ -7,8 +7,7 @@
             [status-im.utils.core :as utils.core]
             [status-im.utils.platform :as platform]
             [status-im.i18n :as i18n]
-            ["react-native" :as react-native]
-            ["dismissKeyboard" :as dismiss-keyboard]
+            ["react-native" :as react-native :refer (Keyboard)]
             ["react-native-image-crop-picker" :default image-picker]
             ["react-native-gesture-handler" :refer (TouchableWithoutFeedback)]
             ["react-native-safe-area-context" :as safe-area-context
@@ -49,7 +48,7 @@
   (when (valid-source? source)
     [image-class props]))
 
-(def switch-class (reagent/adapt-react-class "Switch"))
+(def switch-class (reagent/adapt-react-class (.-Switch react-native)))
 
 (defn switch [props]
   [switch-class props])
@@ -83,7 +82,7 @@
 
 (def dimensions (.-Dimensions react-native))
 (def keyboard (.-Keyboard react-native))
-(def dismiss-keyboard! dismiss-keyboard)
+(def dismiss-keyboard! #(.dismiss Keyboard))
 (def linking (.-Linking react-native))
 (def desktop-notification (.-DesktopNotification (.-NativeModules react-native)))
 

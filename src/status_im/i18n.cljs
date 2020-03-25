@@ -3,7 +3,7 @@
    [clojure.string :as string]
    ["i18n-js" :as i18n]
    [status-im.i18n-resources :as i18n-resources]
-   [status-im.goog.i18n-module :as goog.i18n]))
+   [status-im.goog.i18n :as goog.i18n]))
 
 (set! (.-locale i18n) (name i18n-resources/default-device-language))
 (set! (.-fallbacks i18n) true)

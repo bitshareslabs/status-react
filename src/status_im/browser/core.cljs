@@ -417,7 +417,7 @@
 (re-frame/reg-fx
  :browser/send-to-bridge
  (fn [message]
-   (let [webview @webview-ref/webview-ref
+   (let [^js webview @webview-ref/webview-ref
          msg (str "ReactNativeWebView.onMessage('"
                   (types/clj->json message)
                   "');")]

@@ -73,7 +73,7 @@
 
 (defonce listener
   (.addListener react/device-event-emitter "gethEvent"
-                #(re-frame/dispatch [:signals/signal-received (.-jsonEvent %)])))
+                #(re-frame/dispatch [:signals/signal-received (.-jsonEvent ^js %)])))
 
 (defn multiaccount-load-account
   "NOTE: beware, the password has to be sha3 hashed

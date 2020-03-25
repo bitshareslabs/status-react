@@ -117,7 +117,7 @@
 
 (defn get-prev-element
   "Get previous item in the iterator, and wind it back to the initial state"
-  [iter]
+  [^js iter]
   (.prev iter)
   (let [e (.-value iter)]
     (.next iter)
@@ -125,7 +125,7 @@
 
 (defn get-next-element
   "Get next item in the iterator, and wind it back to the initial state"
-  [iter]
+  [^js iter]
   (.next iter)
   (let [e (.-value iter)]
     (.prev iter)
@@ -133,13 +133,13 @@
 
 (defn update-message
   "Update the message and siblings with positional info"
-  [tree message]
-  (let [iter (.find tree message)
-        previous-message (when (.-hasPrev iter)
-                           (get-prev-element iter))
-        next-message     (when (.-hasNext iter)
-                           (get-next-element iter))
-        message-with-pos-data (add-group-info message previous-message next-message)]
+  [^js tree message]
+  (let [^js iter (.find tree message)
+        ^js previous-message (when (.-hasPrev iter)
+                               (get-prev-element iter))
+        ^js next-message     (when (.-hasNext iter)
+                               (get-next-element iter))
+        ^js message-with-pos-data (add-group-info message previous-message next-message)]
     (cond->
      (.update iter message-with-pos-data)
 
@@ -154,13 +154,13 @@
 
 (defn remove-message
   "Remove a message in the list"
-  [tree prepared-message]
+  [^js tree prepared-message]
   (let [iter (.find tree prepared-message)]
     (if (not iter)
       tree
-      (let [new-tree (.remove iter)
-            next-message     (when (.-hasNext iter)
-                               (get-next-element iter))]
+      (let [^js new-tree (.remove iter)
+            ^js next-message     (when (.-hasNext iter)
+                                   (get-next-element iter))]
         (if (not next-message)
           new-tree
           (update-message new-tree next-message))))))
@@ -170,8 +170,8 @@
   its positional metadata, and update the left & right messages if necessary,
   this operation is O(logN) for insertion, and O(logN) for the updates, as
   we need to re-find (there's probably a better way)"
-  [old-message-list prepared-message]
-  (let [tree (.insert old-message-list prepared-message prepared-message)]
+  [^js old-message-list prepared-message]
+  (let [^js tree (.insert old-message-list prepared-message prepared-message)]
     (update-message tree prepared-message)))
 
 (defn add [message-list message]
@@ -183,7 +183,7 @@
           message-list
           messages))
 
-(defn ->seq [message-list]
+(defn ->seq [^js message-list]
   (if message-list
     (array-seq (.-values message-list))
     []))

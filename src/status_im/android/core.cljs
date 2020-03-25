@@ -32,7 +32,7 @@
       (fn [this]
         (.addListener react/keyboard
                       "keyboardDidShow"
-                      (fn [e]
+                      (fn [^js e]
                         (let [h (.. e -endCoordinates -height)]
                           (when-not (= h @keyboard-height)
                             (dispatch [:set :keyboard-height h])
