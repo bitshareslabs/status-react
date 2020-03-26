@@ -25,6 +25,7 @@ import android.graphics.BitmapFactory;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.NotificationCompat;
@@ -47,6 +48,18 @@ class NewMessageSignalHandler {
     private Context context;
     private Intent serviceIntent;
     private Boolean shouldRefreshNotifications;
+
+    public Class getMainActivityClass() {
+        String packageName = context.getPackageName();
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        String className = launchIntent.getComponent().getClassName();
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public NewMessageSignalHandler(Context context) {
         // NOTE: when instanciated the NewMessageSignalHandler class starts a foreground service
@@ -94,13 +107,31 @@ class NewMessageSignalHandler {
                     message.getTimestamp(),
                     message.getAuthor());
         }
-
+        Class intentClass = getMainActivityClass();
+        if (intentClass == null) {
+            Log.e(TAG, "No activity class found for the notification");
+            return;
+        }
+        Intent intent = new Intent(context, intentClass);
+        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+        intent.setAction(Intent.ACTION_VIEW);
+        //NOTE: you might wonder, why the heck did he decide to set these flags in particular. Well,
+        //the answer is a simple as it can get in the Android native development world. I noticed
+        //that my initial setup was opening the app but wasn't triggering any events on the js side, like
+        //the links do from the browser. So I compared both intents and noticed that the link from
+        //the browser produces an intent with the flag 0x14000000. I found out that it was the following
+        //flags in this link:
+        //https://stackoverflow.com/questions/52390129/android-intent-setflags-issue
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setData(Uri.parse("status-im://chat/private/" + chat.getId()));
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, intent, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_notify_status)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setStyle(messagingStyle)
-            .setGroup(GROUP_STATUS_MESSAGES);
+            .setGroup(GROUP_STATUS_MESSAGES)
+            .setContentIntent(pendingIntent);
         if (Build.VERSION.SDK_INT >= 21) {
             builder.setVibrate(new long[0]);
         }
