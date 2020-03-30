@@ -152,12 +152,12 @@
      [react/view {:style {:align-self :flex-start :padding-left 16 :margin-bottom 24}}
       [react/text {:style {:font-size (if small-screen? 15 17) :font-weight "700"}}
        (i18n/label :t/confirmation-request)]]
-     (when (and (:amount message) (:currency message))
+     (when (and (:formatted-amount message) (:formatted-currency message))
        [react/view {:style {:margin-bottom 24 :align-self :stretch}}
         [react/nested-text {:style {:font-weight "500" :font-size (if small-screen? 34 44)
                                     :text-align :center}}
-         (str (:amount message) " ")
-         [{:style {:color colors/gray}} (:currency message)]]
+         (str (:formatted-amount message) " ")
+         [{:style {:color colors/gray}} (:formatted-currency message)]]
         [react/text {:style {:font-size 19 :text-align :center
                              :margin-bottom 16}}
          (str fiat-amount " " fiat-currency)]

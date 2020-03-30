@@ -2,6 +2,7 @@
   (:require [clojure.string :as string]
             [re-frame.core :as re-frame]
             [status-im.ethereum.core :as ethereum]
+            [status-im.ethereum.json-rpc :as json-rpc]
             [status-im.hardwallet.card :as card]
             [status-im.utils.fx :as fx]
             [status-im.utils.types :as types]
@@ -33,12 +34,13 @@
                   (common/show-wrong-keycard-alert card-connected?))))))
 
 (def sign-typed-data-listener (atom nil))
-(fx/defn sign-typed-data
 
+(fx/defn sign-typed-data
   {:events [:hardwallet/sign-typed-data]}
   [{:keys [db] :as cofx}]
   (let [card-connected? (get-in db [:hardwallet :card-connected?])
-        hash (get-in db [:hardwallet :hash])]
+        hash (get-in db [:hardwallet :hash])
+        _ (log/info "###sign-typed-data" (get db :signing/sign))]
     (if card-connected?
       (do
         (when @sign-typed-data-listener
@@ -54,10 +56,34 @@
                   (common/set-on-card-connected :hardwallet/sign-typed-data)
                   {:db (assoc-in db [:signing/sign :keycard-step] :signing)})))))
 
+(fx/defn fetch-currency-symbol-on-success
+  {:events [:hardwallet/fetch-currency-symbol-on-success]}
+  [{:keys [db] :as cofx} currency]
+  {:db (assoc-in db [:signing/sign :formatted-data :message :formatted-currency] currency)})
+
+(fx/defn fetch-currency-decimals-on-success
+  {:events [:hardwallet/fetch-currency-decimals-on-success]}
+  [{:keys [db] :as cofx} decimals]
+  {:db (update-in db [:signing/sign :formatted-data :message]
+                  #(assoc % :formatted-amount (/ (:amount %) (Math/pow 10 decimals))))})
+
 (fx/defn store-hash-and-sign-typed
   {:events [:hardwallet/store-hash-and-sign-typed]}
   [{:keys [db] :as cofx} result]
-  (let [{:keys [result error]} (types/json->clj result)]
+  (let [{:keys [result error]} (types/json->clj result)
+        currency-contract (get-in db [:signing/sign :formatted-data :message :currency])]
+    (json-rpc/eth-call {:contract currency-contract
+                        :method "decimals()"
+                        :outputs ["uint8"]
+                        :on-success  (fn [[decimals]]
+                                       (re-frame/dispatch [:hardwallet/fetch-currency-decimals-on-success decimals]))})
+
+    (json-rpc/eth-call {:contract currency-contract
+                        :method "symbol()"
+                        :outputs ["string"]
+                        :on-success (fn [[currency]]
+                                      (re-frame/dispatch [:hardwallet/fetch-currency-symbol-on-success currency]))})
+
     (fx/merge cofx
               {:db (assoc-in db [:hardwallet :hash] result)}
               sign-typed-data)))
