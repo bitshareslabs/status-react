@@ -75,7 +75,7 @@
 
 (fx/defn handle-private-chat [cofx chat-id]
   (log/info "universal-links: handling private chat" chat-id)
-  (chat/navigate-to-chat cofx chat-id))
+  (chat/start-chat cofx chat-id {}))
 
 (fx/defn handle-public-chat [cofx public-chat]
   (log/info "universal-links: handling public chat" public-chat)
