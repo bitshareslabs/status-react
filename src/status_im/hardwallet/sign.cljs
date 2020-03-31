@@ -5,6 +5,7 @@
             [status-im.ethereum.json-rpc :as json-rpc]
             [status-im.hardwallet.card :as card]
             [status-im.utils.fx :as fx]
+            [status-im.utils.money :as money]
             [status-im.utils.types :as types]
             [taoensso.timbre :as log]
             [status-im.hardwallet.common :as common]))
@@ -39,8 +40,7 @@
   {:events [:hardwallet/sign-typed-data]}
   [{:keys [db] :as cofx}]
   (let [card-connected? (get-in db [:hardwallet :card-connected?])
-        hash (get-in db [:hardwallet :hash])
-        _ (log/info "###sign-typed-data" (get db :signing/sign))]
+        hash (get-in db [:hardwallet :hash])]
     (if card-connected?
       (do
         (when @sign-typed-data-listener
@@ -65,7 +65,8 @@
   {:events [:hardwallet/fetch-currency-decimals-on-success]}
   [{:keys [db] :as cofx} decimals]
   {:db (update-in db [:signing/sign :formatted-data :message]
-                  #(assoc % :formatted-amount (/ (:amount %) (Math/pow 10 decimals))))})
+                  #(assoc % :formatted-amount (.dividedBy (money/bignumber (:amount %))
+                                                          (money/bignumber (money/from-decimal decimals)))))})
 
 (fx/defn store-hash-and-sign-typed
   {:events [:hardwallet/store-hash-and-sign-typed]}
