@@ -250,8 +250,9 @@ android {
         }
         pr {
             initWith release
-            applicationIdSuffix ".pr"
-            versionNameSuffix   ".pr"
+            // NOTE: payments are allowed only on prod app id
+            // applicationIdSuffix ".pr"
+            // versionNameSuffix   ".pr"
             debuggable          false
             matchingFallbacks = ["release"]
             // necessary to make react-native-config's code generation work
