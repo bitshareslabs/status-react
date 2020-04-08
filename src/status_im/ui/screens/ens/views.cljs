@@ -361,10 +361,10 @@
   (case state
     :available
     (i18n/label :t/ens-username-registration-confirmation
-                {:username (stateofus/subdomain username)})
+                {:username (stateofus/username-with-domain username)})
     :connected-with-different-key
     (i18n/label :t/ens-username-connection-confirmation
-                {:username (stateofus/subdomain username)})
+                {:username (stateofus/username-with-domain username)})
     :connected
     (i18n/label :t/ens-saved-title)
     ;;NOTE: this state can't be reached atm
