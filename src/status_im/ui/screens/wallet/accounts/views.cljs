@@ -217,8 +217,8 @@
       [react/view {:flex 1}
        [accounts-options {:y y}]
        [reanimated/scroll-view {:on-scroll           on-scroll
+                                :style               {:padding-top value-height}
                                 :scrollEventThrottle 1}
-        [react/view {:height value-height}]
         [react/view {:margin-top 8}
          [accounts]]
         [assets]

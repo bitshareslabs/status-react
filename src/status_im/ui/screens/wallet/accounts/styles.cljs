@@ -1,24 +1,30 @@
 (ns status-im.ui.screens.wallet.accounts.styles
   (:require [status-im.ui.components.colors :as colors]
-            [status-im.ui.components.reanimated :as reanimated]))
+            [status-im.ui.components.reanimated :as reanimated]
+            [status-im.utils.platform :as platform]))
 
 (defn topbar [{:keys [value offset inset-top]}]
-  {:flex-direction     :row
-   :padding-horizontal 8
-   :left               0
-   :right              0
-   :padding-top        inset-top
-   :shadow-offset      {:width 0 :height 4}
-   :shadow-radius      16
-   :shadow-opacity     (reanimated/interpolate value
-                                               {:inputRange  [0 offset]
-                                                :outputRange [0 1]
-                                                :extrapolate (:clamp reanimated/extrapolate)})
-   :z-index            2
-   :background-color   colors/white
-   :shadow-color       (if (colors/dark?)
-                         "rgba(0, 0, 0, 0.75)"
-                         "rgba(0, 9, 26, 0.12)")})
+  (merge
+   {:flex-direction     :row
+    :padding-horizontal 8
+    :background-color   colors/white
+    :padding-top        inset-top}
+   (when platform/android?
+     {:elevation (reanimated/interpolate value
+                                         {:inputRange  [0 offset]
+                                          :outputRange [0 4]
+                                          :extrapolate (:clamp reanimated/extrapolate)})})
+   (when platform/ios?
+     {:shadow-opacity (reanimated/interpolate value
+                                              {:inputRange  [0 offset]
+                                               :outputRange [0 1]
+                                               :extrapolate (:clamp reanimated/extrapolate)})
+      :shadow-radius  16
+      :z-index        2
+      :shadow-color   (if (colors/dark?)
+                        "rgba(0, 0, 0, 0.75)"
+                        "rgba(0, 9, 26, 0.12)")
+      :shadow-offset  {:width 0 :height 4}})))
 
 (defn card-common []
   {:margin-vertical   16
