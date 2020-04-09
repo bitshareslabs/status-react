@@ -96,22 +96,21 @@
                      :key-fn             :name
                      :render-fn          (render-asset (:code currency) prices-loading?)}]))
 
-(def tabbar-height 56)
-;; TODO(Ferossgp): get layout size of total-value
-(def value-height (+ 40 22 8))
-(def scroll-offset value-height)
-
 (views/defview total-value [{:keys [y]}]
   (views/letsubs [currency        [:wallet/currency]
                   portfolio-value [:portfolio-value]
                   prices-loading? [:prices-loading?]]
-    [reanimated/view {:style {:transform [{:translateY
+    [reanimated/view {:style {:position  :absolute
+                              :left      8
+                              :top       0
+                              :transform [{:translateY
                                            (reanimated/interpolate y
-                                                                   {:inputRange       [0 scroll-offset]
-                                                                    :outputRange      [scroll-offset (/ (- tabbar-height 36) 2)]
+                                                                   {:inputRange       [0 styles/scroll-offset]
+                                                                    :outputRange      [styles/scroll-offset (/ (- styles/tabbar-height
+                                                                                                                  styles/minimized-value-line-height) 2)]
                                                                     :extrapolateRight (:clamp reanimated/extrapolate)})}]}}
      [reanimated/text {:style {:font-size   (reanimated/interpolate y
-                                                                    {:inputRange  [0 scroll-offset]
+                                                                    {:inputRange  [0 styles/scroll-offset]
                                                                      :outputRange [32 20]
                                                                      :extrapolate (:clamp reanimated/extrapolate)})
                                :color       colors/black
@@ -119,7 +118,7 @@
       portfolio-value
       [reanimated/text {:style {:color colors/gray}}
        (str " " (:code currency))]]
-     [reanimated/view {:style {:opacity (reanimated/interpolate y {:inputRange  [0 scroll-offset]
+     [reanimated/view {:style {:opacity (reanimated/interpolate y {:inputRange  [0 styles/scroll-offset]
                                                                    :outputRange [1 0]})}}
       [react/text {:style {:color       colors/gray
                            :font-size   15
@@ -149,31 +148,36 @@
        (reagent/as-element
         [reanimated/view {:style (styles/topbar {:inset-top (oget insets "top")
                                                  :value     y
-                                                 :offset    scroll-offset})}
+                                                 :offset    styles/scroll-offset})}
          [react/view {:flex               1
-                      :height             tabbar-height
+                      :height             styles/tabbar-height
                       :padding-horizontal 8
-                      :justify-content    :center}
+                      :flex-direction     :row
+                      :align-items        :center}
           [total-value {:y y}]
           (when (and mnemonic
                      (not empty-balances?))
-            [react/touchable-highlight
-             {:on-press #(re-frame/dispatch [:navigate-to :backup-seed])}
-             [react/view {:flex-direction :row :align-items :center}
-              [react/view {:width            14
-                           :height           14
-                           :background-color colors/gray
-                           :border-radius    7
-                           :align-items      :center
-                           :justify-content  :center
-                           :margin-right     9}
-               [react/text {:style {:color       colors/white
-                                    :font-size   13
-                                    :font-weight "700"}}
-                "!"]]
-              [react/text {:style               {:color colors/gray}
-                           :accessibility-label :back-up-your-seed-phrase-warning}
-               (i18n/label :t/back-up-your-seed-phrase)]]])]
+            [reanimated/view {:style {:flex            1
+                                      :justify-content :center
+                                      :opacity         (reanimated/interpolate y {:inputRange  [0 styles/scroll-offset]
+                                                                                  :outputRange [1 0]})}}
+             [react/touchable-highlight
+              {:on-press #(re-frame/dispatch [:navigate-to :backup-seed])}
+              [react/view {:flex-direction :row :align-items :center}
+               [react/view {:width            14
+                            :height           14
+                            :background-color colors/gray
+                            :border-radius    7
+                            :align-items      :center
+                            :justify-content  :center
+                            :margin-right     9}
+                [react/text {:style {:color       colors/white
+                                     :font-size   13
+                                     :font-weight "700"}}
+                 "!"]]
+               [react/text {:style               {:color colors/gray}
+                            :accessibility-label :back-up-your-seed-phrase-warning}
+                (i18n/label :t/back-up-your-seed-phrase)]]]])]
          [react/touchable-highlight
           {:on-press #(request-camera-permissions)}
           [react/view {:height             toolbar.styles/toolbar-height
@@ -217,7 +221,7 @@
       [react/view {:flex 1}
        [accounts-options {:y y}]
        [reanimated/scroll-view {:on-scroll           on-scroll
-                                :style               {:padding-top value-height}
+                                :style               {:padding-top styles/value-height}
                                 :scrollEventThrottle 1}
         [react/view {:margin-top 8}
          [accounts]]

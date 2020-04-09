@@ -3,6 +3,12 @@
             [status-im.ui.components.reanimated :as reanimated]
             [status-im.utils.platform :as platform]))
 
+(def ^:const tabbar-height 56)
+;; TODO(Ferossgp): get layout size of total-value
+(def ^:const value-height (+ 40 22 8))
+(def ^:const scroll-offset value-height)
+(def ^:const minimized-value-line-height 28)
+
 (defn topbar [{:keys [value offset inset-top]}]
   (merge
    {:flex-direction     :row
