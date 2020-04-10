@@ -2,7 +2,6 @@
   (:require [re-frame.core :as re-frame]
             [status-im.multiaccounts.model :as multiaccounts.model]
             [status-im.ethereum.json-rpc :as json-rpc]
-            [status-im.utils.config :as config]
             [status-im.chat.db :as chat.db]
             [status-im.waku.core :as waku]
             [status-im.chat.models :as chat-model]
@@ -12,18 +11,10 @@
             [status-im.constants :as constants]
             [status-im.contact.db :as contact.db]
             [status-im.data-store.messages :as data-store.messages]
-            [status-im.ethereum.core :as ethereum]
-            [status-im.mailserver.core :as mailserver]
-            [status-im.native-module.core :as status]
             [status-im.ui.screens.chat.state :as view.state]
             [status-im.transport.message.protocol :as protocol]
-            [status-im.transport.utils :as transport.utils]
-            [status-im.ui.components.react :as react]
-            [status-im.utils.clocks :as utils.clocks]
             [status-im.utils.datetime :as time]
             [status-im.utils.fx :as fx]
-            [status-im.utils.platform :as platform]
-            [status-im.utils.types :as types]
             [taoensso.timbre :as log]))
 
 (defn- prepare-message
@@ -91,18 +82,16 @@
               (when message-to-be-removed
                 (hide-message chat-id message-to-be-removed))
               (fn [{:keys [db]}]
-                {:db            (cond->
-                                 (-> db
-                                      ;; We should not be always adding to the list, as it does not make sense
-                                      ;; if the chat has not been initialized, but run into
-                                      ;; some troubles disabling it, so next time
-                                     (update-in [:chats chat-id :messages] assoc message-id prepared-message)
-                                     (update-in [:chats chat-id :message-list] message-list/add prepared-message))
-
-                                  (and (not seen-by-user?)
-                                       (not= from current-public-key))
-                                  (update-in [:chats chat-id :loaded-unviewed-messages-ids]
-                                             (fnil conj #{}) message-id))}))))
+                {:db (cond-> (-> db
+                                 ;; We should not be always adding to the list, as it does not make sense
+                                 ;; if the chat has not been initialized, but run into
+                                 ;; some troubles disabling it, so next time
+                                 (update-in [:chats chat-id :messages] assoc message-id prepared-message)
+                                 (update-in [:chats chat-id :message-list] message-list/add prepared-message))
+                       (and (not seen-by-user?)
+                            (not= from current-public-key))
+                       (update-in [:chats chat-id :loaded-unviewed-messages-ids]
+                                  (fnil conj #{}) message-id))}))))
 
 (fx/defn add-received-message
   [{:keys [db] :as cofx}
@@ -192,9 +181,11 @@
         (fx/merge cofx
                   (add-received-message message-with-chat-id)
                   (update-unviewed-count message-with-chat-id)
-                  (chat-model/join-time-messages-checked chat-id)
-                  (when platform/desktop?
-                    (chat-model/update-dock-badge-label)))))))
+                  (chat-model/join-time-messages-checked chat-id))))))
+
+(fx/defn receive
+  [cofx messages]
+  (apply fx/merge cofx (map receive-one messages)))
 
 ;;;; Send message
 

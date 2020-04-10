@@ -107,6 +107,25 @@
               (when (and public? new?)
                 (transport.filters/load-chat chat-id)))))
 
+(fx/defn ensure-chats
+  "Add chats to db and update"
+  [{:keys [db] :as cofx} chats]
+  (let [chats (map #(merge
+                     (or (get (:chats db) (:chat-id %))
+                         (create-new-chat (:chat-id %) cofx))
+                     %)
+                   chats)
+        filter-chats (filter #(and (not (get-in db [:chats (:chat-id %)]))
+                                   (:public? %))
+                             chats)]
+    (fx/merge cofx
+              {:db (update db :chats #(reduce
+                                       (fn [acc {:keys [chat-id] :as chat}]
+                                         (update acc chat-id merge chat))
+                                       %
+                                       chats))}
+              (transport.filters/load-chats filter-chats))))
+
 (fx/defn upsert-chat
   "Upsert chat when not deleted"
   [{:keys [db] :as cofx} {:keys [chat-id] :as chat-props}]
