@@ -16,21 +16,57 @@
     :background-color   colors/white
     :padding-top        inset-top}
    (when platform/android?
-     {:elevation (reanimated/interpolate value
-                                         {:inputRange  [0 offset]
-                                          :outputRange [0 4]
-                                          :extrapolate (:clamp reanimated/extrapolate)})})
+     {:elevation (reanimated/interpolate
+                  value
+                  {:inputRange  [0 offset]
+                   :outputRange [0 4]
+                   :extrapolate (:clamp reanimated/extrapolate)})})
    (when platform/ios?
-     {:shadow-opacity (reanimated/interpolate value
-                                              {:inputRange  [0 offset]
-                                               :outputRange [0 1]
-                                               :extrapolate (:clamp reanimated/extrapolate)})
+     {:shadow-opacity (reanimated/interpolate
+                       value
+                       {:inputRange  [0 offset]
+                        :outputRange [0 1]
+                        :extrapolate (:clamp reanimated/extrapolate)})
       :shadow-radius  16
       :z-index        2
       :shadow-color   (if (colors/dark?)
                         "rgba(0, 0, 0, 0.75)"
                         "rgba(0, 9, 26, 0.12)")
       :shadow-offset  {:width 0 :height 4}})))
+
+(defn value-container [y]
+  {:position  :absolute
+   :left      8
+   :top       0
+   :transform [{:translateY
+                (reanimated/interpolate
+                 y
+                 {:inputRange       [0 scroll-offset]
+                  :outputRange      [scroll-offset
+                                     (/ (- tabbar-height
+                                           minimized-value-line-height) 2)]
+                  :extrapolateRight (:clamp reanimated/extrapolate)})}]})
+
+(defn value-text [y]
+  {:font-size   (reanimated/interpolate
+                 y
+                 {:inputRange  [0 scroll-offset]
+                  :outputRange [32 20]
+                  :extrapolate (:clamp reanimated/extrapolate)})
+   :color       colors/black
+   :font-weight "600"})
+
+(defn value-helper [y]
+  {:opacity (reanimated/interpolate y
+                                    {:inputRange  [0 scroll-offset]
+                                     :outputRange [1 0]})})
+
+(defn accounts-mnemonic [y]
+  {:flex            1
+   :justify-content :center
+   :opacity         (reanimated/interpolate y
+                                            {:inputRange  [0 scroll-offset]
+                                             :outputRange [1 0]})})
 
 (defn card-common []
   {:margin-vertical   16

@@ -54,7 +54,7 @@
 
 (defn event
   ([config]
-   (event config {:useNativeDriver true}))
+   (event config {}))
   ([config options]
    (ocall animated "event" (clj->js config) (clj->js options))))
 
@@ -91,28 +91,45 @@
 (defn call* [args callback]
   (ocall animated "call" (clj->js args) callback))
 
-(defn timing [clock' opts config]
-  (ocall animated "timing" clock' (clj->js opts) (clj->js config)))
+(defn timing [clock-value opts config]
+  (ocall animated "timing" clock-value
+         (clj->js opts) (clj->js config)))
 
-(defn spring [clock' opts config]
-  (ocall animated "spring" clock' (clj->js opts) (clj->js config)))
+(defn spring [clock-value opts config]
+  (ocall animated "spring" clock-value
+         (clj->js opts) (clj->js config)))
 
 (def extrapolate {:clamp (oget animated "Extrapolate" "CLAMP")})
 
 ;; Gesture handler
 
-(def tap-gesture-handler (reagent/adapt-react-class (oget js-deps/react-native-gesture-handler "TapGestureHandler")))
-(def pan-gesture-handler (reagent/adapt-react-class (oget js-deps/react-native-gesture-handler "PanGestureHandler")))
-(def long-press-gesture-handler (reagent/adapt-react-class (oget js-deps/react-native-gesture-handler "LongPressGestureHandler")))
+(def tap-gesture-handler
+  (reagent/adapt-react-class
+   (oget js-deps/react-native-gesture-handler "TapGestureHandler")))
+
+(def pan-gesture-handler
+  (reagent/adapt-react-class
+   (oget js-deps/react-native-gesture-handler "PanGestureHandler")))
+
+(def long-press-gesture-handler
+  (reagent/adapt-react-class
+   (oget js-deps/react-native-gesture-handler "LongPressGestureHandler")))
+
 (def pure-native-button (oget js-deps/react-native-gesture-handler "PureNativeButton"))
-(def touchable-without-feedback-class (oget js-deps/react-native-gesture-handler "TouchableWithoutFeedback"))
-(def createNativeWrapper (oget js-deps/react-native-gesture-handler "createNativeWrapper"))
 
-(def touchable-without-feedback (reagent/adapt-react-class touchable-without-feedback-class))
+(def touchable-without-feedback-class
+  (oget js-deps/react-native-gesture-handler "TouchableWithoutFeedback"))
 
-(def animated-raw-button (reagent/adapt-react-class
-                          (createNativeWrapper
-                           (createAnimatedComponent touchable-without-feedback-class))))
+(def createNativeWrapper
+  (oget js-deps/react-native-gesture-handler "createNativeWrapper"))
+
+(def touchable-without-feedback
+  (reagent/adapt-react-class touchable-without-feedback-class))
+
+(def animated-raw-button
+  (reagent/adapt-react-class
+   (createNativeWrapper
+    (createAnimatedComponent touchable-without-feedback-class))))
 
 (def state (oget js-deps/react-native-gesture-handler "State"))
 

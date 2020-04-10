@@ -100,26 +100,12 @@
   (views/letsubs [currency        [:wallet/currency]
                   portfolio-value [:portfolio-value]
                   prices-loading? [:prices-loading?]]
-    [reanimated/view {:style {:position  :absolute
-                              :left      8
-                              :top       0
-                              :transform [{:translateY
-                                           (reanimated/interpolate y
-                                                                   {:inputRange       [0 styles/scroll-offset]
-                                                                    :outputRange      [styles/scroll-offset (/ (- styles/tabbar-height
-                                                                                                                  styles/minimized-value-line-height) 2)]
-                                                                    :extrapolateRight (:clamp reanimated/extrapolate)})}]}}
-     [reanimated/text {:style {:font-size   (reanimated/interpolate y
-                                                                    {:inputRange  [0 styles/scroll-offset]
-                                                                     :outputRange [32 20]
-                                                                     :extrapolate (:clamp reanimated/extrapolate)})
-                               :color       colors/black
-                               :font-weight "600"}}
+    [reanimated/view {:style (styles/value-container y)}
+     [reanimated/text {:style (styles/value-text y)}
       portfolio-value
       [reanimated/text {:style {:color colors/gray}}
        (str " " (:code currency))]]
-     [reanimated/view {:style {:opacity (reanimated/interpolate y {:inputRange  [0 styles/scroll-offset]
-                                                                   :outputRange [1 0]})}}
+     [reanimated/view {:style (styles/value-helper y)}
       [react/text {:style {:color       colors/gray
                            :font-size   15
                            :line-height 22}}
@@ -157,10 +143,7 @@
           [total-value {:y y}]
           (when (and mnemonic
                      (not empty-balances?))
-            [reanimated/view {:style {:flex            1
-                                      :justify-content :center
-                                      :opacity         (reanimated/interpolate y {:inputRange  [0 styles/scroll-offset]
-                                                                                  :outputRange [1 0]})}}
+            [reanimated/view {:style (styles/accounts-mnemonic y)}
              [react/touchable-highlight
               {:on-press #(re-frame/dispatch [:navigate-to :backup-seed])}
               [react/view {:flex-direction :row :align-items :center}
