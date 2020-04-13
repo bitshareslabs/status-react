@@ -71,7 +71,7 @@
 
 (defn- fill-prepare-transaction-details
   [db
-   {:keys [address name value symbol gas gasPrice public-key from-chat?]
+   {:keys [address name value symbol gas gasPrice gasLimit]
     :or   {symbol :ETH}}
    all-tokens]
   (assoc db :wallet/prepare-transaction
@@ -79,15 +79,14 @@
                   :to-name (or name (find-address-name db address))
                   :from    (ethereum/get-default-account
                             (get db :multiaccount/accounts))}
-           public-key (assoc :public-key public-key)
            gas (assoc :gas (money/bignumber gas))
-           gasPrice (assoc :gas-price (money/bignumber gasPrice))
+           gasLimit  (assoc :gas (money/bignumber gasLimit))
+           gasPrice (assoc :gasPrice (money/bignumber gasPrice))
            value (assoc :amount-text
                         (if (= :ETH symbol)
                           (str (money/internal->formatted value symbol (get all-tokens symbol)))
                           (str value)))
-           symbol (assoc :symbol symbol)
-           from-chat? (assoc :from-chat? from-chat?))))
+           symbol (assoc :symbol symbol))))
 
 (fx/defn request-uri-parsed
   {:events [:wallet/request-uri-parsed]}
@@ -102,10 +101,10 @@
         {:db (update db :wallet/prepare-transaction assoc
                      :to address :to-name (find-address-name db address))}
         (let [current-chain-id (get-in networks [current-network :config :NetworkId])]
-          (if (and chain-id (not= current-chain-id chain-id))
-            {:ui/show-error (i18n/label :t/wallet-invalid-chain-id
-                                        {:data uri :chain current-chain-id})}
-            {:db (fill-prepare-transaction-details db details all-tokens)})))
+          (merge {:db (fill-prepare-transaction-details db details all-tokens)}
+                 (when (and chain-id (not= current-chain-id chain-id))
+                   {:ui/show-error (i18n/label :t/wallet-invalid-chain-id
+                                               {:data uri :chain current-chain-id})}))))
       {:ui/show-error (i18n/label :t/wallet-invalid-address {:data uri})})))
 
 (fx/defn qr-scanner-cancel
@@ -128,6 +127,7 @@
                         acc)))
                   {:paths [] :ens-names []}
                   [[:address] [:function-arguments :address]])]
+      (println "message" message)
       (if (empty? ens-names)
         ;; if there are no ens-names, we dispatch request-uri-parsed immediately
         (request-uri-parsed cofx message uri)
@@ -152,4 +152,6 @@
   (fx/merge cofx
             (navigation/navigate-back)
             (parse-eip681-uri-and-resolve-ens data)
-            (fn [{:keys [db]}] {:db (assoc-in db [:wallet/prepare-transaction :modal-opened?] false)})))
+            (fn [{:keys [db]}]
+              (when (get-in db [:wallet/prepare-transaction :modal-opened?])
+                {:db (assoc-in db [:wallet/prepare-transaction :modal-opened?] false)}))))

@@ -25,7 +25,7 @@
 (def key-value-format (str "([^" parameter-separator key-value-separator "]+)"))
 (def query-pattern (re-pattern (str key-value-format key-value-separator key-value-format)))
 
-(def valid-native-arguments #{:value :gas :gasPrice})
+(def valid-native-arguments #{:value :gas :gasPrice :gasLimit})
 
 (defn- parse-query [s]
   (into {} (for [[_ k v] (re-seq query-pattern (or s ""))]
@@ -81,20 +81,21 @@
           n (money/bignumber (string/replace s "ETH" ""))]
       (if eth? (.times n 1e18) n))))
 
-(defn extract-request-details [{:keys [value address function-name function-arguments]} all-tokens]
+(defn extract-request-details [{:keys [value address function-name function-arguments] :as details} all-tokens]
   "Return a map encapsulating request details (with keys `value`, `address` and `symbol`) from a parsed URI.
    Supports ethereum and erc20 token."
   (when address
-    (case function-name
-      nil
-      {:value   (parse-eth-value value)
-       :symbol  :ETH
-       :address address}
-      "transfer"
-      {:value   (money/bignumber (:uint256 function-arguments))
-       :symbol  (:symbol (tokens/address->token all-tokens address))
-       :address (:address function-arguments)}
-      nil)))
+    (merge details
+           (case function-name
+             nil
+             {:value   (parse-eth-value value)
+              :symbol  :ETH
+              :address address}
+             "transfer"
+             {:value   (money/bignumber (:uint256 function-arguments))
+              :symbol  (:symbol (tokens/address->token all-tokens address))
+              :address (:address function-arguments)}
+             nil))))
 
 (defn- generate-query-string [m]
   (string/join parameter-separator
